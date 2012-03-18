@@ -1400,6 +1400,14 @@ static ssize_t metrics_cpu_kcycles_used_show(struct device *fbdev,
 			atomic_read(&dev->cpu_kcycles_used));
 }
 
+static ssize_t monitor_show(struct device *fbdev,
+				   struct device_attribute *a, char *buf) {
+	struct fb_info *fb_info = dev_get_drvdata(fbdev);
+	return snprintf(buf, PAGE_SIZE, "%s-%s\n",
+			fb_info->monspecs.monitor,
+			fb_info->monspecs.serial_no);
+}
+
 static ssize_t edid_show(
 			struct file *filp,
 			struct kobject *kobj, struct bin_attribute *a,
@@ -1475,6 +1483,7 @@ static struct device_attribute fb_device_attrs[] = {
 	__ATTR_RO(metrics_bytes_identical),
 	__ATTR_RO(metrics_bytes_sent),
 	__ATTR_RO(metrics_cpu_kcycles_used),
+	__ATTR_RO(monitor),
 	__ATTR(metrics_reset, S_IWUSR, NULL, metrics_reset_store),
 };
 
